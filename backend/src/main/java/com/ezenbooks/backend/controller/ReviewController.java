@@ -1,12 +1,12 @@
 package com.ezenbooks.backend.controller;
 
-import java.net.http.HttpHeaders;
 import java.nio.charset.Charset;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -38,10 +38,16 @@ public class ReviewController {
 	}
 
 	@GetMapping("/review/{book_num}")
-	public List<ReviewDTO> reviewList(@PathVariable("book_num") int book_num ) throws Exception {
+	public List<ReviewDTO> reviewList(@PathVariable("book_num") int book_num) throws Exception {
 		return reviewService.reviewList(book_num);
 	}
-	
+
+	// Admin 리뷰 관리 용 모든 리뷰 반환
+	@GetMapping("/reviewlist")
+	public List<ReviewDTO> review() throws Exception {
+		return reviewService.review();
+	}
+
 	// http://localhost:8090/review
 	@PostMapping("/review")
 	public ResponseEntity<Object> postReview(@RequestBody ReviewDTO reviewDTO) throws Exception {
@@ -49,11 +55,11 @@ public class ReviewController {
 		int chk = reviewService.insert(reviewDTO);
 		System.out.println("review_controller: " + chk);
 
-		/* 여기 왜 자꾸 에러날까? 
-		 * HttpHeaders headers = new HttpHeaders();
+		/*
+		 * 여기 왜 자꾸 에러날까? HttpHeaders headers = new HttpHeaders();
 		 */
-		
-		org.springframework.http.HttpHeaders headers = new org.springframework.http.HttpHeaders();
+
+		HttpHeaders headers = new org.springframework.http.HttpHeaders();
 		headers.setContentType(new MediaType("application", "json", Charset.forName("UTF-8")));
 
 		HashMap<String, String> map = new HashMap<>();
@@ -67,21 +73,17 @@ public class ReviewController {
 		}
 	}
 
-	@PutMapping("/review/{user_id}/{review_content}")
-	public void putReview(@PathVariable("user_id") int user_id, @PathVariable("review_content") String review_content)
-			throws Exception {
-		System.out.printf("id=%d, completed=%d\n", user_id, review_content);
-		ReviewDTO reviewDTO = new ReviewDTO();
-		 reviewDTO.setUser_id(user_id);
-		 reviewDTO.setReview_content(review_content);
-		reviewService.update(reviewDTO);
+	// http://localhost:8090/review/update
+	@PutMapping("/review/update")
+	public void updateReview(@RequestBody ReviewDTO dto) throws Exception {
+		reviewService.update(dto);
 	}
 
-	// http://localhost:8090/review/11
+	// http://localhost:8090/review/1
 	@ResponseBody
-	@DeleteMapping("/review/{user_id}")
-	public void deleteReview(@PathVariable("user_id") int user_id) throws Exception {
-		System.out.printf("id=%d\n", user_id);
-		reviewService.delete(user_id);
+	@DeleteMapping("/review/{review_num}")
+	public void deleteReview(@PathVariable("review_num") int review_num) throws Exception {
+		System.out.printf("num=%d\n", review_num);
+		reviewService.delete(review_num);
 	}
 }

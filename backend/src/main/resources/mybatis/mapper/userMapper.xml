@@ -7,12 +7,34 @@
     namespace 에 정의되어 있는 값과 일치해야 한다. -->
 <mapper namespace="com.ezenbooks.backend.dao.UserDAO">
 	<select id="getUserList" resultType="UserDTO">
-		SELECT * FROM USERS
+		SELECT * FROM USERS ORDER BY USER_ID
 	</select>
 	
-		<select id="getUser" resultType="UserDTO">
+	<select id="getUser" resultType="UserDTO">
 		SELECT * FROM USERS
 		 WHERE USER_NAME = #{username}
 	    </select>
+	
+	
+	 <select id="content" parameterType="int" resultType="UserDTO">
+        SELECT * FROM USERS
+        WHERE user_id=#{user_id}
+    </select>
+	
+	<update id="updateUserList" parameterType="UserDTO">
+		UPDATE USERS
+		SET	user_name = #{user_name},
+			user_email = #{user_email},
+			user_nickname = #{user_nickname},
+ 			user_role = #{user_role},
+			modify_date = sysdate
+		WHERE user_id = #{user_id}
+	</update>
+    
+	
+	<delete id="delUserList" parameterType="int">
+		DELETE FROM USERS
+		WHERE user_id=#{user_id} 
+	</delete>
 
 </mapper>

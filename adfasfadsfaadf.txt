@@ -1,0 +1,53 @@
+	<select id="getNewestList"  resultType="BookDTO">
+		SELECT * FROM BOOKS
+    	ORDER BY BOOK_PUBDATE DESC
+	</select>
+
+
+  const category_code = [
+    {
+      category_id: 1,
+      name: '전체',
+      category_id: 2,
+      name: '소설',
+      category_id: 3,
+      name: '시/에세이',
+      category_id: 4,
+      name: '경제/경영',
+      category_id: 5,
+      name: '자기계발',
+      category_id: 6,
+      name: '인문',
+      category_id: 7,
+      name: '역사/문화',
+      category_id: 8,
+      name: '사회',
+      category_id: 9,
+      name: '과학',
+      category_id: 10,
+      name: '예술/종교',
+      category_id: 11,
+      name: '어린이/청소년',
+      category_id: 12,
+      name: '생활',
+      category_id: 13,
+      name: '취미',
+      category_id: 14,
+      name: '어학',
+      category_id: 15,
+      name: 'IT',
+      category_id: 16,
+      name: '학습',
+      category_id: 17,
+      name: '해외도서',
+      category_id: 18,
+      name: '라이트노벨',
+      category_id: 19,
+      name: '만화',
+      category_id: 20,
+      name: '기타',
+    },
+  ];
+
+
+//			@GetMapping("/category?{code}")

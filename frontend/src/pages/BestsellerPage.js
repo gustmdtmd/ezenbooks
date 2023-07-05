@@ -10,7 +10,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faArrowRight } from '@fortawesome/free-solid-svg-icons';
 import { useCart } from 'react-use-cart';
 import Pagination from '../components/Shared/Pagination';
-import StarRate from '../components/Shared/StarRate';
+// import StarRate from '../components/Shared/StarRate';
 
 const BestsellerPage = () => {
   const [bestseller, setBestseller] = useState([]);
@@ -129,9 +129,9 @@ const BestsellerPage = () => {
                     <p id='book-discounted-price'>{bDiscountedPrice}원</p>
                     <p id='book-discounted-percent'>&nbsp;(10%)</p>
                   </div>
-                  <div className='rating'>
+                  {/* <div className='rating'>
                     <StarRate />
-                  </div>
+                  </div> */}
                 </div>
                 <div className='book-cart col-2 colums-row'>
                   <div>

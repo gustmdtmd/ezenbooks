@@ -10,4 +10,8 @@ public interface CurationService {
 	
 	public List<BookDTO> userPickProcess(int user_id, int bought);
 	
+	public Integer userIdProcess(String user_name);
+	
+	public Integer recentPurchaseProcess(Integer user_id);
+	
 }

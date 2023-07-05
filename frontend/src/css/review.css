@@ -37,6 +37,11 @@ div.write-form-wrap {
   margin-left: 10px;
   padding: 0;
 }
+
+form.write-form {
+  width: 100%;
+}
+
 textarea {
   width: 100%;
   height: 100px;
@@ -66,4 +71,9 @@ div.review-writer {
 .review-edit-btn,
 .review-delete-btn {
   margin: 5px 0px 5px 45px;
+}
+
+.star_avg {
+  margin-top: 18px;
+  font-size: 24px;
 }

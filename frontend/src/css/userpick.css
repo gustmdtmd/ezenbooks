@@ -1,0 +1,63 @@
+div.userpick-title p {
+  font-size: 30px;
+  font-weight: bold;
+  width: 1680px;
+  height: 35px;
+}
+
+div.set_pages {
+  margin-left: 20px;
+}
+.pick-table-header,
+.pick-data {
+  width: 1680px;
+}
+
+div#userpick-card {
+  width: 1680px;
+  margin-left: 20px;
+}
+
+table.pick-table-header th {
+  height: 50px;
+}
+
+.userpick-cart,
+.userpick-category {
+  width: 150px;
+}
+
+.userpick-table-title {
+  width: 470px;
+}
+
+.userpick-author {
+  width: 230px;
+}
+
+.userpick-price,
+.userpick-publisher {
+  width: 200px;
+}
+
+td.userpick-price {
+  text-align: right;
+}
+
+.userpick-image {
+  width: 90px;
+  height: 120px;
+}
+
+.userpick-pubdate {
+  width: 170px;
+}
+
+.userpick-cart button {
+  margin-bottom: 10px;
+}
+
+footer {
+  margin: auto;
+  margin-top: 10px;
+}

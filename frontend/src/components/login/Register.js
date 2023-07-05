@@ -1,15 +1,17 @@
-import React from 'react';
 import axios from 'axios';
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Swal from 'sweetalert2';
-
-import '../../css/login.css';
 import { baseUrl } from '../commonApi/mainApi';
+import '../../css/login.css';
 
 //회원가입
 const Register = () => {
   const navigator = useNavigate();
+
+  const config = {
+    headers: { 'Content-Type': 'application/json' },
+  };
 
   const [member, setMember] = useState({
     user_name: '',
@@ -43,50 +45,68 @@ const Register = () => {
   });
 
   const onSubmit = async (e) => {
-    const result = validChk('submit');
-    if (!result.valid) {
-      const msg = errorMessage[result.where];
-      e.preventDefault();
-      Swal.fire({ text: '가입완료', width: 400 });
-    }
     e.preventDefault();
-    window.location.href = '/';
-
-    await axios
-      .post(`${baseUrl}/register`, member, {
-        headers: { 'Content-Type': 'application/json' },
-      })
-      .then((response) => {
-        setMember({
-          user_name: '',
-          user_pwd: '',
-          user_confirmpwd: '',
-          user_nickname: '',
-          user_email: '',
-          user_role: 'ROLE_MEMBER',
+    if (
+      effect.user_name &&
+      effect.user_nickname &&
+      effect.user_email &&
+      effect.user_pwd &&
+      effect.user_confirmpwd
+    ) {
+      Swal.fire({ text: '가입완료', width: 400 });
+      await axios
+        .post(`${baseUrl}/register`, member, {
+          headers: { 'Content-Type': 'application/json' },
+        })
+        .then((response) => {
+          console.log(response.data);
+          setMember({
+            user_name: '',
+            user_pwd: '',
+            user_confirmpwd: '',
+            user_nickname: '',
+            user_email: '',
+            user_role: 'ROLE_MEMBER',
+          });
+        })
+        .then((response) => {
+          navigator('/');
+        })
+        .catch((err) => {
+          console.error(err.message);
         });
-      })
-      .then((response) => {
-        navigator('/');
-      })
-      .catch((err) => {
-        console.error(err.message);
+    } else {
+      Swal.fire({
+        text: '입력한 정보를 확인하세요!',
+        width: '500',
       });
+      return false;
+    }
   };
 
   // 정규식
 
   // 아이디 체크
   // 사용자 ID는 5자 이상이어야 하며 문자 또는 숫자를 포함해야 합니다.
-  const validChk = (target) => {
+  const validChk = (target, data) => {
     if (target !== 'submit' && target === 'user_name') {
       const idRegExp = /^[A-Za-z0-9+]{5,}$/;
       if (!idRegExp.test(member.user_name)) {
         setEffect({ ...effect, user_name: false });
+        document.getElementById('idMsg').innerHTML =
+          "<span style='color: red;'>사용자 ID는 5자 이상이어야 하며 문자 또는 숫자를 포함해야 합니다.</span>";
         return { valid: false, where: 'user_name' };
       } else {
-        setEffect({ ...effect, user_name: true });
-        console.log(effect);
+        if (data === 0) {
+          setEffect({ ...effect, user_name: true });
+          document.getElementById('idMsg').innerHTML =
+            "<span style='color: green;'>사용가능한 아이디입니다.</span>";
+          console.log(effect);
+        } else {
+          setEffect({ ...effect, user_name: false });
+          document.getElementById('idMsg').innerHTML =
+            "<span style='color: red;'>중복된 아이디입니다.</span>";
+        }
       }
     }
 
@@ -115,24 +135,44 @@ const Register = () => {
 
     // 닉네임 확인
     if (target !== 'submit' && target === 'user_nickname') {
-      const nicknameRegExp = /^(?=.*[a-z0-9가-힣])[a-z0-9가-힣]{2,10}$/;
+      const nicknameRegExp = /^(?=.*[a-z0-9가-힣])[a-z0-9가-힣]{2,7}$/;
       if (!nicknameRegExp.test(member.user_nickname)) {
         setEffect({ ...effect, user_nickname: false });
+        document.getElementById('nicknameMsg').innerHTML =
+          "<span style='color: red;'> 최소 2자에 영어,한글,숫자 상관없이 7자 안으로 입력해주세요.</span>";
         return { valid: false, where: 'user_nickname' };
       } else {
-        setEffect({ ...effect, user_nickname: true });
-        console.log(effect);
+        if (data === 0) {
+          setEffect({ ...effect, user_nickname: true });
+          document.getElementById('nicknameMsg').innerHTML =
+            "<span style='color: green;'>사용가능한 닉네임입니다.</span>";
+        } else {
+          setEffect({ ...effect, user_nickname: false });
+          document.getElementById('nicknameMsg').innerHTML =
+            "<span style='color: red;'>이미 사용중인 닉네임입니다.</span>";
+        }
       }
     }
 
+    // 이메일 확인
     if (target !== 'submit' && target === 'user_email') {
       const emailRegExp =
         /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
       if (!emailRegExp.test(member.user_email)) {
         setEffect({ ...effect, user_email: false });
+        document.getElementById('emailMsg').innerHTML =
+          "<span style='color: red;'>이메일 형식에 맞게 작성해주세요.</span>";
         return { valid: false, where: 'user_email' };
       } else {
-        setEffect({ ...effect, user_email: true });
+        if (data === 0) {
+          setEffect({ ...effect, user_email: true });
+          document.getElementById('emailMsg').innerHTML =
+            "<span style='color: green;'>사용가능한 이메일입니다.</span>";
+        } else {
+          setEffect({ ...effect, user_email: false });
+          document.getElementById('emailMsg').innerHTML =
+            "<span style='color: red;'>이미 사용중인 이메일입니다.</span>";
+        }
       }
     }
 
@@ -140,21 +180,48 @@ const Register = () => {
   };
 
   const handleValueChange = (e) => {
-    // radio 버튼에서는 e.preventDefault()를 하면 더블클릭을 해줘야한다.
-    // e.preventDefault();
-    // setMember({ ...member, [e.target.name]: e.target.value });
-    // const currentId = e.target.value;
     member[e.target.name] = e.target.value;
-
     validChk(e.target.name);
   };
 
-  // 유효성 검사
-  // const [userIdError, setUserIdError] = useState(false);
-  // const [PasswordError, setPasswordError] = useState(false);
-  // const [confirmPasswordError, setConfirmPasswordError] = useState(false);
-  // const [userNicknameError, setUserNicknameError] = useState(false);
-  // const [emailError, setEmailError] = useState(false);
+  const nameValueChange = async (e) => {
+    member[e.target.name] = e.target.value;
+
+    await axios
+      .post(baseUrl + '/idChk', member, config)
+      .then((response) => {
+        validChk(e.target.name, response.data);
+      })
+      .catch((err) => {
+        console.error(err.message);
+      });
+  };
+
+  const nicknameValueChange = async (e) => {
+    member[e.target.name] = e.target.value;
+
+    await axios
+      .post(baseUrl + '/nicknameChk', member, config)
+      .then((response) => {
+        validChk(e.target.name, response.data);
+      })
+      .catch((err) => {
+        console.error(err.message);
+      });
+  };
+
+  const emailValueChange = async (e) => {
+    member[e.target.name] = e.target.value;
+
+    await axios
+      .post(baseUrl + '/emailChk', member, config)
+      .then((response) => {
+        validChk(e.target.name, response.data);
+      })
+      .catch((err) => {
+        console.error(err.message);
+      });
+  };
 
   return (
     <div className='container register-wrap'>
@@ -166,28 +233,14 @@ const Register = () => {
             <br />
             <input
               maxLength={15}
+              id='id'
               type='text'
               className='form-control'
               name='user_name'
               placeholder='Username'
-              onChange={handleValueChange}
+              onChange={nameValueChange}
             />
-            {/* 유효성체크 */}
-            {effect.user_name ? (
-              <span id='idMsg' style={{ color: 'green' }}>
-                사용가능한 ID 입니다.
-              </span>
-            ) : (
-              <span id='idMsg' style={{ color: 'red' }}>
-                {/* {message.username} */}
-              </span>
-            )}
-
-            {!effect.user_name && member.user_name.length > 0 && (
-              <span id='idMsg' style={{ color: 'red' }}>
-                {errorMessage.user_name}
-              </span>
-            )}
+            <span id='idMsg'></span>
           </div>
 
           <div className='form-group'>
@@ -259,22 +312,9 @@ const Register = () => {
               className='form-control'
               name='user_nickname'
               placeholder='nickname'
-              onChange={handleValueChange}
+              onChange={nicknameValueChange}
             />
-            {effect.user_nickname ? (
-              <span id='idMsg' style={{ color: 'green' }}>
-                사용가능한 닉네임입니다
-              </span>
-            ) : (
-              <span id='idMsg' style={{ color: 'red' }}>
-                {/* {errorMessage.user_nickname} */}
-              </span>
-            )}
-            {!effect.user_nickname && member.user_nickname.length > 0 && (
-              <span id='idMsg' style={{ color: 'red' }}>
-                {errorMessage.user_nickname}
-              </span>
-            )}
+            <span id='nicknameMsg'></span>
           </div>
 
           <div className='form-group'>
@@ -285,23 +325,9 @@ const Register = () => {
               className='form-control'
               name='user_email'
               placeholder='Email'
-              onChange={handleValueChange}
+              onChange={emailValueChange}
             />
-            {effect.user_email ? (
-              <span id='idMsg' style={{ color: 'green' }}>
-                사용가능한 이메일 입니다.
-              </span>
-            ) : (
-              <span id='idMsg' style={{ color: 'red' }}>
-                {/* {errorMessage.user_email} */}
-              </span>
-            )}
-
-            {!effect.user_email && member.user_email.length > 0 && (
-              <span id='idMsg' style={{ color: 'red' }}>
-                {errorMessage.user_email}
-              </span>
-            )}
+            <span id='emailMsg'></span>
           </div>
           {/* <hr className='my-3' /> */}
           <div className='form-group'>

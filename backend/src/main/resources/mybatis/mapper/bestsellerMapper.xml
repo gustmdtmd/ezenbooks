@@ -5,7 +5,7 @@
 
 <mapper namespace="com.ezenbooks.backend.dao.BestsellerDAO">
 	<select id="getBestsellerList" parameterType="BestsellerDTO" resultType="BookDTO">
-		select * from (select b.BOOK_NUM, b.BOOK_TITLE, b.BOOK_AUTHOR, b.BOOK_PUBLISHER, b.BOOK_PUBDATE, b.BOOK_IMAGE, b.BOOK_PRICE, b.BOOK_ISBN, bc.CATEGORY_NAME
+		select * from (select b.BOOK_NUM, b.CATEGORY_CODE, b.BOOK_TITLE, b.BOOK_AUTHOR, b.BOOK_PUBLISHER, b.BOOK_PUBDATE, b.BOOK_IMAGE, b.BOOK_PRICE, b.BOOK_ISBN
         from BOOKS b
         		inner join BOOK_CATEGORY bc on b.CATEGORY_CODE = bc.CATEGORY_CODE
             	inner join USER_ORDER_DETAIL uod on b.BOOK_NUM = uod.BOOKS_BOOK_NUM
@@ -19,7 +19,7 @@
     		</otherwise>
     	</choose>
     	<![CDATA[
-               group by b.BOOK_NUM, b.BOOK_TITLE, b.BOOK_AUTHOR, b.BOOK_PUBLISHER, b.BOOK_PUBDATE, b.BOOK_IMAGE, b.BOOK_PRICE, b.BOOK_ISBN, uod.BOOK_COUNT, bc.CATEGORY_NAME
+               group by b.BOOK_NUM, b.CATEGORY_CODE, b.BOOK_TITLE, b.BOOK_AUTHOR, b.BOOK_PUBLISHER, b.BOOK_PUBDATE, b.BOOK_IMAGE, b.BOOK_PRICE, b.BOOK_ISBN, uod.BOOK_COUNT
                order by sum(uod.BOOK_COUNT) desc)
 		where rownum <= 10
 		]]>

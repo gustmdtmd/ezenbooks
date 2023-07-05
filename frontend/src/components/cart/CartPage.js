@@ -7,7 +7,7 @@ import {
   faPlus,
 } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import StarRate from '../Shared/StarRate';
+// import StarRate from '../Shared/StarRate';
 import { useCart } from 'react-use-cart';
 import CartEmpty from '../../routes/CartEmpty';
 import Swal from 'sweetalert2';
@@ -114,9 +114,9 @@ const CartPage = () => {
                   <p id='book-discounted-price'>{book.dprice}원</p>
                   <p id='book-discounted-percent'>&nbsp;(10%)</p>
                 </div>
-                <div className='rating'>
+                {/* <div className='rating'>
                   <StarRate />
-                </div>
+                </div> */}
               </div>
               <div className='book-quantity-wrap col-2 container d-flex'>
                 <div className='book-quantity-body container-fluid p-0 d-flex'>

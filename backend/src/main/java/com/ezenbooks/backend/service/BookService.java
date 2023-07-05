@@ -26,5 +26,15 @@ public interface BookService {
 	/* 여기서 부터 환석님꺼 합친거 */
 	
 	public List<BookDTO> searchList(String book_title) throws Exception;
+	
+	/* 예림 */
+	
+	public int insert(BookDTO bookDTO) throws Exception;
+	
+	public void update(BookDTO bookDTO) throws Exception;
+	
+	public BookDTO updatepro(int book_num);
+
+	public int delete(int book_num) throws Exception;
 
 }

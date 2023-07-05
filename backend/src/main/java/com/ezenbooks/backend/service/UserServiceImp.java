@@ -19,13 +19,30 @@ public class UserServiceImp implements UserService{
 	}
 	
 	@Override
-	public UserDTO userSearch() throws Exception {
-		return userDAO.getUser();
+	public UserDTO userSearch(String username) throws Exception {
+		return userDAO.getUser(username);
 	}
 	
 	@Override
 	public List<UserDTO> userSearchList() throws Exception {
 		return userDAO.getUserList();
+	}
+	
+	/* 예림 */
+	
+	@Override
+	public UserDTO updatepro(int user_id) {
+		return userDAO.content(user_id);
+	}
+
+	@Override
+	public void update(UserDTO userDTO)throws Exception {
+		userDAO.updateUserList(userDTO);
+	}
+	
+	@Override
+	public int delete(int user_id) throws Exception {
+		return userDAO.delUserList(user_id);
 	}
 
 	}

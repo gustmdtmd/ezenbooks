@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+    PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.ezenbooks.backend.dao.BestsellerDAO">
+	<select id="getBestsellerList" parameterType="BestsellerDTO" resultType="BookDTO">
+		select * from (select b.BOOK_NUM, b.BOOK_TITLE, b.BOOK_AUTHOR, b.BOOK_PUBLISHER, b.BOOK_PUBDATE, b.BOOK_IMAGE, b.BOOK_PRICE, b.BOOK_ISBN, bc.CATEGORY_NAME
+        from BOOKS b
+        		inner join BOOK_CATEGORY bc on b.CATEGORY_CODE = bc.CATEGORY_CODE
+            	inner join USER_ORDER_DETAIL uod on b.BOOK_NUM = uod.BOOKS_BOOK_NUM
+            	inner join USER_ORDER UO on UO.ORDER_NUM = uod.ORDER_NUM
+    	<choose>
+    		<when test="category_code != 0">	
+               where b.CATEGORY_CODE = #{category_code} and uo.ORDER_DATE >= to_char(add_months(sysdate, - 1), 'YYYY-MM-DD')
+    		</when>
+    		<otherwise>
+    		   where uo.ORDER_DATE >= to_char(add_months(sysdate, - 1), 'YYYY-MM-DD')
+    		</otherwise>
+    	</choose>
+    	<![CDATA[
+               group by b.BOOK_NUM, b.BOOK_TITLE, b.BOOK_AUTHOR, b.BOOK_PUBLISHER, b.BOOK_PUBDATE, b.BOOK_IMAGE, b.BOOK_PRICE, b.BOOK_ISBN, uod.BOOK_COUNT, bc.CATEGORY_NAME
+               order by sum(uod.BOOK_COUNT) desc)
+		where rownum <= 10
+		]]>
+	</select>
+	
+	<select id="getNewBooksList" parameterType="Integer" resultType="BookDTO">
+		select * from (select b.*, bc.CATEGORY_NAME
+               from BOOKS b
+                        inner join BOOK_CATEGORY bc on bc.CATEGORY_CODE = b.CATEGORY_CODE
+    	
+    	<if test="category_code != 0">
+               where bc.CATEGORY_CODE = #{categoty_code}
+        </if>
+    	
+    	
+    	<![CDATA[
+               order by b.BOOK_PUBDATE desc)
+		where rownum <= 10
+		]]>
+	</select>
+</mapper>   
+
+
+
+
+
+
+
+
+
+
+
+
+
+ 
+ 
+ 
+ 
+ 
+ 
+    

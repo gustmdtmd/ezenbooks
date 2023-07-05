@@ -7,8 +7,17 @@ import com.ezenbooks.backend.dto.UserDTO;
 @Service
 public interface UserService {
 	
-	public UserDTO userSearch() throws Exception;
+	public UserDTO userSearch(String username) throws Exception;
 
 	public List<UserDTO> userSearchList() throws Exception;
+	
+	/* ¿¹¸² */
+	
+	public void update(UserDTO userDTO) throws Exception;
+	
+	public UserDTO updatepro(int user_id);
+	
+	public int delete(int user_id) throws Exception;
+
 
 }

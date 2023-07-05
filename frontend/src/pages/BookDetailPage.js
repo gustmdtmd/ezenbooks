@@ -12,7 +12,7 @@ import {
   // faX,
 } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import StarRate from '../components/Shared/StarRate';
+// import StarRate from '../components/Shared/StarRate';
 import { useParams } from 'react-router-dom';
 import { useCart } from 'react-use-cart';
 import CategoryName from '../components/Shared/CategoryName';
@@ -22,6 +22,7 @@ const BookDetailPage = () => {
   const { id } = useParams();
   const [book, setBook] = useState({});
   const { addItem } = useCart();
+  const book_num = parseInt(id);
 
   // 금액 천단위로 나누기
   const bPrice = (book.book_price * 1).toLocaleString('ko-KR');
@@ -64,6 +65,23 @@ const BookDetailPage = () => {
     addItem(item);
   };
 
+  const [review, setReview] = useState([]);
+
+  useEffect(() => {
+    getReview(book_num);
+  }, []);
+
+  async function getReview(book_num) {
+    await axios
+      .get(baseUrl + '/review/' + book_num)
+      .then((response) => {
+        setReview(response.data);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  }
+
   return (
     <div className='book-detail-wrap container-fluid'>
       <div className='book-detail-body colums-row'>
@@ -83,14 +101,10 @@ const BookDetailPage = () => {
                     <p>{book.book_author}</p>
                   </div>
                   <div className='rating columns-row'>
-                    <div className='stars'>
-                      <StarRate />
-                      {/* <Rating
-                        name='book-rating'
-                        value={book.book_rating}
-                        readOnly
-                      /> */}
-                    </div>
+                    {/* <div className='stars'>
+                      <StarRate review={review} />
+  
+                    </div> */}
                     <div className='shipping mt-2'>
                       <p>택배배송 / 무료배송</p>
                     </div>

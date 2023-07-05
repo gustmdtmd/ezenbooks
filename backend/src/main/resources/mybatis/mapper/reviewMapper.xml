@@ -4,15 +4,22 @@
     "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="com.ezenbooks.backend.dao.ReviewDAO">
-	
-	<select id="reviewList" resultType="ReviewDTO">
+
+	<select id="review" resultType="ReviewDTO">
 		SELECT * FROM book_review
-		WHERE book_num=#{book_num}		
 	</select>
 
-	<insert id="insertReview" parameterType="ReviewDTO" keyProperty="review_num">
+	<select id="reviewList" resultType="ReviewDTO">
+		SELECT * FROM book_review
+		WHERE book_num=#{book_num}
+		ORDER BY review_num DESC
+	</select>
+
+	<insert id="insertReview" parameterType="ReviewDTO"
+		keyProperty="review_num">
 		INSERT INTO
-		book_review(review_num, user_id, book_num, review_content,
+		book_review(review_num, user_id, book_num,
+		review_content,
 		review_rating, review_writer, review_reporting_date)
 		VALUES(book_review_review_num_seq.nextval,#{user_id},#{book_num},#{review_content},#{review_rating},#{review_writer},
 		sysdate)
@@ -21,12 +28,13 @@
 	<update id="updateReview" parameterType="ReviewDTO">
 		UPDATE book_review
 		SET
-		review_content = #{review_content}
-		WHERE user_id = #{user_id}
+		review_content = #{review_content}, review_reporting_date = sysdate,
+		review_rating = #{review_rating}
+		WHERE review_num = #{review_num}
 	</update>
 
 	<delete id="deleteReview" parameterType="int">
 		DELETE FROM book_review
-		WHERE user_id=#{user_id}
+		WHERE review_num=#{review_num}
 	</delete>
 </mapper>

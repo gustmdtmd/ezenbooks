@@ -23,23 +23,28 @@ public class ReviewServiceImp implements ReviewService{
 	}
 	
 	@Override
+	public List<ReviewDTO> review() throws Exception {
+		return reviewDAO.review();
+	}
+	
+	@Override
 	public List<ReviewDTO> reviewList(int book_num) throws Exception {
 		return reviewDAO.reviewList(book_num);
 	}
 
 	@Override
-	public int insert(ReviewDTO reviewdDTO) throws Exception {
+	public int insert(ReviewDTO dto) throws Exception {
 		System.out.println("ReviewService");
-		return reviewDAO.insertReview(reviewdDTO);
+		return reviewDAO.insertReview(dto);
 	}
 
 	@Override
-	public int update(ReviewDTO reviewDTO) throws Exception {
-		return reviewDAO.updateReview(reviewDTO);
+	public void update(ReviewDTO dto) throws Exception {
+		reviewDAO.updateReview(dto);
 	}
 
 	@Override
-	public int delete(int user_id) throws Exception {
-		return reviewDAO.deleteReview(user_id);
+	public int delete(int review_num) throws Exception {
+		return reviewDAO.deleteReview(review_num);
 	}
 }

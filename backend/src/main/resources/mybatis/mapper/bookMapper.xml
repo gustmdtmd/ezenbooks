@@ -23,18 +23,18 @@
         FROM BOOKS
         ORDER BY BOOK_PUBDATE DESC
     )
-    WHERE ROWNUM &lt; 51
-</select>
+   	 WHERE ROWNUM &lt; 51
+	</select>
 
 	<!-- 신간 전부 가져오기  -->
 	<select id="getNewestList" resultType="BookDTO">
     SELECT *
     FROM BOOKS
     ORDER BY BOOK_PUBDATE DESC
-</select>
+	</select>
 
 	
-		<select id="getCategoryNewestList"  resultType="BookDTO"  parameterType="int">
+	<select id="getCategoryNewestList"  resultType="BookDTO"  parameterType="int">
 		SELECT * FROM BOOKS
 	    WHERE CATEGORY_CODE = #{code}
         ORDER BY BOOK_PUBDATE DESC
@@ -44,6 +44,35 @@
   		WHERE BOOK_TITLE LIKE '%' || #{BOOK_TITLES} || '%' 
     </select>
 	
-
+	
+	<insert id="insertBookList" parameterType="BookDTO">
+        INSERT INTO BOOKS(BOOK_NUM, CATEGORY_CODE, BOOK_TITLE, BOOK_AUTHOR, BOOK_IMAGE, BOOK_PRICE, BOOK_PUBLISHER, BOOK_PUBDATE, BOOK_ISBN, BOOK_DESC)
+        VALUES(BOOKS_BOOK_NUM_SEQ.NEXTVAL,#{category_code},#{book_title},#{book_author},#{book_image},#{book_price},#{book_publisher},#{book_pubdate},#{book_isbn},#{book_desc, jdbcType=VARCHAR}) 
+    </insert>
+    
+     <select id="content" parameterType="int" resultType="BookDTO">
+        SELECT * FROM BOOKS
+        WHERE book_num=#{book_num}
+    </select>
+	
+	<update id="updateBookList" parameterType="BookDTO">
+		UPDATE BOOKS
+		SET	book_title = #{book_title}, 
+			category_code = #{category_code},
+			book_author = #{book_author},
+			book_image = #{book_image},
+			book_price = #{book_price},
+			book_publisher = #{book_publisher},
+			book_pubdate = #{book_pubdate},
+			book_isbn = #{book_isbn},
+			book_desc = #{book_desc, jdbcType=VARCHAR}
+		WHERE book_num = #{book_num}
+	</update>
+    
+	
+	<delete id="delBookList" parameterType="int">
+		DELETE FROM BOOKS
+		WHERE book_num=#{book_num} 
+	</delete>
 
 </mapper>

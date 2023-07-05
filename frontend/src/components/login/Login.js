@@ -92,9 +92,13 @@ const Login = () => {
         // let jwtToken = response.headers.get("Authorization");
 
         let jwtUsername = response.data.username;
+        let jwtUsernickname = response.data.usernickname;
+        let jwtUserid = response.data.userid;
         console.log('jwtToken', jwtToken);
         localStorage.setItem('Authorization', jwtToken);
         localStorage.setItem('username', jwtUsername);
+        localStorage.setItem('usernickname', jwtUsernickname);
+        localStorage.setItem('userid', jwtUserid);
 
         setUsername('');
         setPassword('');

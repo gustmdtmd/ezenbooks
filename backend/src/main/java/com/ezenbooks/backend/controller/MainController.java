@@ -38,22 +38,27 @@ public class MainController {
 	
 	/**
 	 * 주문 기록 기반 추천
-	 * 접속중인 유저 ID와 최근 본 책의 번호를 받아 추천 리스트를 반환한다.
+	 * 접속중인 유저 ID와 최근 구매한 책의 번호를 받아 추천 리스트를 반환한다.
 	 * 
 	 * @author 김요한
 	 * @param user_id
 	 * @param bought
 	 * @return List<BookDTO>
 	 */
-	@GetMapping({"/curation/{user_id}/{bought}", "/curation"})
-	public ResponseEntity<List<BookDTO>> curation(@PathVariable(required = false) Integer user_id, 
-												  @PathVariable(required = false) Integer bought) {
+	@GetMapping("/curation")
+	public ResponseEntity<List<BookDTO>> curation(@RequestParam(required = false) String user_name, 
+												  @RequestParam(required = false) Integer bought) {
 				
-		log.info("user_id: " + user_id);
+		log.info("user_name: " + user_name);
+		log.info("bought: " + bought);
 		
-		if (ObjectUtils.isEmpty(bought) || ObjectUtils.isEmpty(bought)) {
-			user_id = 1;
+		Integer user_id = curationService.userIdProcess(user_name);
+		
+		if (ObjectUtils.isEmpty(bought)) {
 			bought = 1;
+		}
+		if(ObjectUtils.isEmpty(user_id)) {
+			user_id = 1;
 		}
 		
 		List<BookDTO> list = curationService.curationProcess(user_id, bought);
@@ -70,14 +75,17 @@ public class MainController {
 	 * @param bought
 	 * @return List<BookDTO>
 	 */
-	@GetMapping({"/userPick/{user_id}/{bought}", "/userPick"})
-	public ResponseEntity<List<BookDTO>> userPick(@PathVariable(required = false) Integer user_id, 
-			 									  @PathVariable(required = false) Integer bought) {
+	@GetMapping("/userPick")
+	public ResponseEntity<List<BookDTO>> userPick(@RequestParam(required = false) String user_name) {
+				
+		Integer user_id = curationService.userIdProcess(user_name);
+		Integer bought = curationService.recentPurchaseProcess(user_id);
+		
+		log.info("user_name: " + user_name);
+		log.info("bought: " + bought);
 		
 		// 로그인이 안된 사용자 이거나, 내역이 없는 사용자인 경우
-		log.info("user_id: " + user_id);
-		
-		if (ObjectUtils.isEmpty(bought) || ObjectUtils.isEmpty(bought)) {
+		if (ObjectUtils.isEmpty(user_name) || ObjectUtils.isEmpty(bought)) {
 			user_id = 1;
 			bought = 1;
 		}
@@ -101,7 +109,7 @@ public class MainController {
 	public ResponseEntity<List<BookDTO>> bestseller(
 			@RequestParam(value = "category_code", required = false, defaultValue = "0") Integer category_code) {
 		 
-		log.info("bestseller.............");
+//		log.info("bestseller.............");
 		
 		BestsellerDTO bestsellerDTO = BestsellerDTO.builder()
 				.category_code(category_code)

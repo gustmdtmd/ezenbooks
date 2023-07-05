@@ -1,6 +1,6 @@
 import './App.css';
 import { Route, Routes, useLocation } from 'react-router-dom';
-
+import React from 'react';
 import Home from './components/Home/Home';
 import Header from './components/Shared/Header';
 import MainTemplate from './components/Shared/MainTemplate';
@@ -13,6 +13,7 @@ import Mypage from './components/login/Mypage';
 import Login from './components/login/Login';
 import Register from './components/login/Register';
 import Logout from './components/login/Logout';
+import ReviewUpdate from './components/review/ReviewUpdate';
 
 // import NotFoundPage from './pages/NotFoundPage';
 
@@ -37,6 +38,7 @@ function App() {
         <Route path='/logout' element={<Logout />} />
         <Route path='/mypage/:id' element={<Mypage />} />
         {/* <Route path='*' element={<NotFoundPage />} /> */}
+        <Route path='/review/:review_num' element={<ReviewUpdate />} />
       </Routes>
     </div>
   );

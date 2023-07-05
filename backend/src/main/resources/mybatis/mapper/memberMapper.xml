@@ -2,25 +2,98 @@
 <!DOCTYPE mapper
     PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
-    
 
-<mapper namespace="com.ezenbooks.backend.repository.UserRepository">
+
+<mapper
+	namespace="com.ezenbooks.backend.repository.UserRepository">
 	<!-- 회원가입 -->
 	<insert id="saveUser" parameterType="UserDTO">
-		INSERT INTO USERS(user_id, user_name, user_pwd, user_email, user_nickname, user_profile, user_role, create_date, modify_date)
-		VALUES(user_id_seq.nextval,#{user_name, jdbcType=VARCHAR},#{user_pwd, jdbcType=VARCHAR},#{user_email, jdbcType=VARCHAR},#{user_nickname, jdbcType=VARCHAR},#{user_profile, jdbcType=VARCHAR},#{user_role, jdbcType=VARCHAR},sysdate,sysdate)
+		INSERT INTO USERS(user_id,
+		user_name, user_pwd, user_email, user_nickname, user_profile,
+		user_role, create_date, modify_date)
+		VALUES(user_id_seq.nextval,#{user_name, jdbcType=VARCHAR},#{user_pwd,
+		jdbcType=VARCHAR},#{user_email, jdbcType=VARCHAR},#{user_nickname,
+		jdbcType=VARCHAR},#{user_profile, jdbcType=VARCHAR},#{user_role,
+		jdbcType=VARCHAR},sysdate,sysdate)
 	</insert>
 
 
 	<!-- 로그인 -->
-	 
-	<select id="getUserAccount"
-		resultType="UserDTO">
+
+	<select id="getUserAccount" resultType="UserDTO">
 		SELECT * FROM users
-		WHERE user_name=#{user_name}
+		WHERE
+		user_name=#{user_name}
 	</select>
-	 
-		
+
+	<!-- 아이디 중복체크 -->
+	<select id="getUserName" resultType="int">
+		SELECT count(*) FROM users
+		WHERE user_name = #{user_name}
+	</select>
+
+	<!-- 닉네임 중복체크 -->
+	<select id="getUserNick" resultType="int">
+		SELECT count(*) FROM users
+		WHERE user_nickname = #{user_nickname}
+	</select>
+
+	<!-- 닉네임 중복시 Usercode 확인 -->
+	<select id="nickUserid" resultType="int">
+		SELECT count(user_nickname)
+		FROM users
+		WHERE user_nickname = #{user_nickname} AND
+		user_id=#{user_id}
+	</select>
+
+	<!-- 이메일 중복체크 -->
+	<select id="getUserEmail" resultType="int">
+		SELECT count(*) FROM users
+		WHERE user_email = #{user_email}
+	</select>
+
+	<!-- 이메일 중복시 Usercode 확인 -->
+	<select id="emailUserid" resultType="int">
+		SELECT count(user_email)
+		FROM users
+		WHERE user_email = #{user_email} AND
+		user_id=#{user_id}
+	</select>
+
+	<update id="updateUser" parameterType="UserDTO">
+		UPDATE users
+		SET
+		user_nickname=#{user_nickname}, user_email=#{user_email},
+		user_pwd=#{user_pwd}, modify_date=sysdate
+		WHERE user_name=#{user_name}
+		AND user_id=#{user_id}
+	</update>
+
+	<!-- 회원탈퇴 -->
+	<delete id="deleteOrderDetail" parameterType="int">
+		DELETE FROM
+		user_order_detail
+		WHERE
+		order_num=#{order_num}
+	</delete>
+
+	<delete id="deleteOrder" parameterType="int">
+		DELETE FROM user_order
+		WHERE
+		user_id=#{user_id}
+	</delete>
+
+	<delete id="deleteReview" parameterType="int">
+		DELETE FROM book_review
+		WHERE
+		user_id=#{user_id}
+	</delete>
+
+	<delete id="deleteUser" parameterType="int">
+		DELETE FROM users WHERE
+		user_id=#{user_id}
+	</delete>
+
 </mapper>
 
 

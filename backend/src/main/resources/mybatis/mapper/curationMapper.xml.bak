@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+    PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.ezenbooks.backend.dao.CurationDAO">
+	<select id="getCurationList" resultType="BookDTO">
+		select b.*, bc.CATEGORY_NAME from BOOKS b
+    	join BOOK_CATEGORY bc on bc.CATEGORY_CODE = b.CATEGORY_CODE
+		where b.BOOK_NUM in
+		<foreach collection="list" item="num" open="(" separator="," close=")">
+			#{num}
+		</foreach>
+		order by decode (b.BOOK_NUM, 
+		<foreach collection="list" item="num" index="index" separator="," close=")">
+			#{num}, #{index}
+		</foreach>
+	</select>
+	
+	<select id="getReviewData" resultType="DataSetDTO">
+		select br.USER_ID, br.BOOK_NUM, br.REVIEW_RATING
+		from BOOK_REVIEW br
+	</select>
+	
+	<select id="getUsersCount" resultType="int">
+		select count(*) from users
+	</select>
+	
+	<select id="getBooksCount" resultType="int">
+		select count(*) from books
+	</select>
+	
+	<select id="getOrderDetailData" resultType="DataSetDTO">
+		select uo.USER_ID as user_id, uod.BOOKS_BOOK_NUM as book_num
+		from USER_ORDER_DETAIL uod join USER_ORDER uo
+    		on uod.ORDER_NUM = uo.ORDER_NUM
+		order by uo.USER_ID
+	</select>
+</mapper>   
+
+
+
+
+
+
+
+
+
+
+
+
+
+ 
+ 
+ 
+ 
+ 
+ 
+    

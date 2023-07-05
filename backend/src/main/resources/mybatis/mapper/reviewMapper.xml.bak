@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+    PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.ezenbooks.backend.dao.ReviewDAO">
+
+	<select id="review" resultType="ReviewDTO">
+		SELECT * FROM book_review
+	</select>
+	
+	<select id="reviewList" resultType="ReviewDTO">
+		SELECT * FROM book_review
+		WHERE book_num=#{book_num}		
+	</select>
+
+	<insert id="insertReview" parameterType="ReviewDTO"
+		keyProperty="review_num">
+		INSERT INTO
+		book_review(review_num, user_id, book_num,
+		review_content,
+		review_rating, review_writer, review_reporting_date)
+		VALUES(book_review_review_num_seq.nextval,#{user_id},#{book_num},#{review_content},#{review_rating},#{review_writer},
+		sysdate)
+	</insert>
+
+	<update id="updateReview" parameterType="ReviewDTO">
+		UPDATE book_review
+		SET
+		review_content = #{review_content}, review_reporting_date = sysdate,
+		review_rating = #{review_rating}
+		WHERE review_num = #{review_num}
+	</update>
+
+	<delete id="deleteReview" parameterType="int">
+		DELETE FROM book_review
+		WHERE review_num=#{review_num}
+	</delete>
+</mapper>

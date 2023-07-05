@@ -11,8 +11,16 @@ import com.ezenbooks.backend.dto.UserDTO;
 @Repository //dao 부분을 선언하는 어노테이션 //sqlSessionTemplete 과 같은 설정을 대신해준다.
 public interface UserDAO {
 
-	public UserDTO getUser() throws Exception;
+	public UserDTO getUser(String username) throws Exception;
 	
 	public List<UserDTO> getUserList() throws Exception;
+	
+	/* 예림 */
+	public UserDTO content(int user_id);
+	
+	public void updateUserList(UserDTO userDTO) throws Exception;
+	
+	public int delUserList(int user_id) throws Exception;
+
 
 }

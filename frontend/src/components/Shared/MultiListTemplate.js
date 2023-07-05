@@ -7,7 +7,6 @@ import { useEffect, useState } from 'react';
 import { baseUrl } from '../commonApi/mainApi';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faArrowRight } from '@fortawesome/free-solid-svg-icons';
-import StarRate from './StarRate';
 import Pagination from './Pagination';
 import { useCart } from 'react-use-cart';
 import CategoryName from './CategoryName';
@@ -122,9 +121,9 @@ const MultiListTemplate = (props) => {
                     <p id='book-discounted-price'>{bDiscountedPrice}원</p>
                     <p id='book-discounted-percent'>&nbsp;(10%)</p>
                   </div>
-                  <div className='rating'>
+                  {/* <div className='rating'>
                     <StarRate />
-                  </div>
+                  </div> */}
                 </div>
                 <div className='book-cart col-2 colums-row'>
                   <div>
